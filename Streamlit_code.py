@@ -39,8 +39,8 @@ if st.button("🚀 Run Processing"):
         try:
             # Inject the uploaded paths into the Main_Code_Task module globals if those global names are used.
             # Many scripts define global variables like 'excel_path' and 'pptx_file' — override them if present.
-            Main_Code_Task._dict_['excel_path'] = excel_path
-            Main_Code_Task._dict_['pptx_file'] = pptx_path
+            Main_Code_Task.__dict__['excel_path'] = excel_path
+            Main_Code_Task.__dict__['pptx_file'] = pptx_path
 
 
 
@@ -59,6 +59,7 @@ if st.button("🚀 Run Processing"):
         except Exception as e:
             st.error(f"❌ Processing failed: {e}")
             st.exception(e)
+
 
 
 
