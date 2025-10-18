@@ -6,7 +6,7 @@ import importlib
 import Main_Code_Task  # your full script file in repo root
 
 st.set_page_config(page_title="Network KPI PowerPoint Updater", page_icon="📊", layout="centered")
-st.title("📊 Network KPI PowerPoint Updater")
+st.title("📊 Custromer KPIs Weekly Slides")
 st.markdown("""
 Upload your *Excel KPI file (.xlsx)* and *PowerPoint template (.pptx)*,  
 then click *Run Processing* to update the report automatically.
@@ -37,19 +37,19 @@ use_win32_if_available = st.checkbox("Allow Windows COM steps if running on Wind
 if st.button("🚀 Run Processing"):
     with st.spinner("Processing — this may take a little while..."):
         try:
-            # Inject the uploaded paths into the Islam_Slides_Task module globals if those global names are used.
+            # Inject the uploaded paths into the Main_Code_Task module globals if those global names are used.
             # Many scripts define global variables like 'excel_path' and 'pptx_file' — override them if present.
-            Islam_Slides_Task._dict_['excel_path'] = excel_path
-            Islam_Slides_Task._dict_['pptx_file'] = pptx_path
+            Main_Code_Task._dict_['excel_path'] = excel_path
+            Main_Code_Task._dict_['pptx_file'] = pptx_path
 
 
 
             # If your script exposes a callable main() run it; otherwise attempt to import/execute.
-            if hasattr(Islam_Slides_Task, 'main'):
-                Islam_Slides_Task.main()
+            if hasattr(Main_Code_Task, 'main'):
+                Main_Code_Task.main()
             else:
                 # fallback: try to run top-level function name or raise
-                raise RuntimeError("Islam_Slides_Task.py does not expose a main() function.")
+                raise RuntimeError("Main_Code_Task.py does not expose a main() function.")
 
             st.success("🎉 PowerPoint updated successfully!")
 
@@ -59,5 +59,6 @@ if st.button("🚀 Run Processing"):
         except Exception as e:
             st.error(f"❌ Processing failed: {e}")
             st.exception(e)
+
 
 
