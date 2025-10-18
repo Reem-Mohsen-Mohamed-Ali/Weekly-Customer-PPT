@@ -1,0 +1,6 @@
+ppt-updater/
+│
+├── Islam_Slides_Task.py           ← your full existing script
+├── app.py                         ← new Streamlit wrapper
+├── requirements.txt               ← Python dependencies
+└── README.md    
