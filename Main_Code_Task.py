@@ -104,8 +104,7 @@ def merge_series(existing_dates, existing_values, new_dates, new_values):
     
 ###Upper
 def main():
-    excel_path=r"C:\Users\mreem\Documents\tools\daily\Orange_Agreed_KPIs_2024-36324-2025_10_13-07_30_00__213.xlsx"
-    pptx_file = r"C:\Users\mreem\Documents\tools\daily\Delta Overview KPIs.pptx"  # Replace with your PowerPoint file path
+
     
     prs = Presentation(pptx_file)
     # Update date on the first and twelfth slides
@@ -1443,5 +1442,6 @@ def main():
     
 if __name__ == "__main__":
     main()
+
 
 
