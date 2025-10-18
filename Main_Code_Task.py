@@ -15,7 +15,6 @@ import pandas as pd
 from pptx import Presentation
 from pptx.chart.data import CategoryChartData
 from datetime import datetime
-import win32com.client
 import os
 import datetime
 import tempfile
@@ -1439,3 +1438,4 @@ def main():
     
 if __name__ == "__main__":
     main()
+
