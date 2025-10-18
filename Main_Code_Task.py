@@ -22,6 +22,11 @@ import shutil
 from openpyxl import load_workbook
 from datetime import datetime, timedelta
 
+def main_with_paths(excel_path_arg, pptx_path_arg):
+    global excel_path, pptx_file
+    excel_path = excel_path_arg
+    pptx_file = pptx_path_arg
+    main()
 # Function to extract data from a chart
 def extract_chart_data(chart):
     categories = [str(category) for category in chart.plots[0].categories]
@@ -1438,4 +1443,5 @@ def main():
     
 if __name__ == "__main__":
     main()
+
 
