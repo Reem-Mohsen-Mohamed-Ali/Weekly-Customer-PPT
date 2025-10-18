@@ -42,7 +42,7 @@ if st.button("🚀 Run Processing"):
             Islam_Slides_Task._dict_['excel_path'] = excel_path
             Islam_Slides_Task._dict_['pptx_file'] = pptx_path
 
-)
+
 
             # If your script exposes a callable main() run it; otherwise attempt to import/execute.
             if hasattr(Islam_Slides_Task, 'main'):
@@ -59,4 +59,5 @@ if st.button("🚀 Run Processing"):
         except Exception as e:
             st.error(f"❌ Processing failed: {e}")
             st.exception(e)
+
 
