@@ -6,7 +6,7 @@ import importlib
 import Main_Code_Task  # your full script file in repo root
 
 st.set_page_config(page_title="Network KPI PowerPoint Updater", page_icon="📊", layout="centered")
-st.title("📊 UE & SI Custromer KPIs Weekly Slides")
+st.title("📊UE & SI Custromer KPIs Weekly Slides")
 st.markdown("""
 Upload your *Excel KPI file (.xlsx) "Orange_Agreed_KPIs"* and *PowerPoint template (.pptx) "Last Updated one"*,  
 then click *Run Processing* to update the report automatically.
@@ -58,6 +58,7 @@ if st.button("🚀 Run Processing"):
         except Exception as e:
             st.error(f"❌ Processing failed: {e}")
             st.exception(e)
+
 
 
 
