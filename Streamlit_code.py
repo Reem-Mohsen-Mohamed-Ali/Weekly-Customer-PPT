@@ -1,48 +1,63 @@
+# app.py
 import streamlit as st
 import tempfile
 import os
-import Islam_Slides_Task  # your existing script
+import importlib
+import Islam_Slides_Task  # your full script file in repo root
 
 st.set_page_config(page_title="Network KPI PowerPoint Updater", page_icon="📊", layout="centered")
-
 st.title("📊 Network KPI PowerPoint Updater")
 st.markdown("""
 Upload your *Excel KPI file (.xlsx)* and *PowerPoint template (.pptx)*,  
 then click *Run Processing* to update the report automatically.
 """)
 
-excel_file = st.file_uploader("📈 Upload Excel file", type=["xlsx"])
-ppt_file = st.file_uploader("📊 Upload PowerPoint file", type=["pptx"])
+excel_file = st.file_uploader("📈 Upload Excel file (.xlsx)", type=["xlsx"])
+ppt_file = st.file_uploader("📊 Upload PowerPoint file (.pptx)", type=["pptx"])
 
-if excel_file and ppt_file:
-    temp_dir = tempfile.mkdtemp()
-    excel_path = os.path.join(temp_dir, excel_file.name)
-    pptx_path = os.path.join(temp_dir, ppt_file.name)
+if not (excel_file and ppt_file):
+    st.info("Please upload both an Excel file and a PowerPoint file.")
+    st.stop()
 
-    with open(excel_path, "wb") as f:
-        f.write(excel_file.read())
-    with open(pptx_path, "wb") as f:
-        f.write(ppt_file.read())
+# Save uploaded files to a temporary working directory
+temp_dir = tempfile.mkdtemp()
+excel_path = os.path.join(temp_dir, excel_file.name)
+pptx_path = os.path.join(temp_dir, ppt_file.name)
 
-    st.success("✅ Files uploaded successfully!")
+with open(excel_path, "wb") as f:
+    f.write(excel_file.read())
+with open(pptx_path, "wb") as f:
+    f.write(ppt_file.read())
 
-    if st.button("🚀 Run Processing"):
+st.success("✅ Files saved to temporary folder.")
+
+# Provide a small checkbox to control whether to run windows-only COM steps
+use_win32_if_available = st.checkbox("Allow Windows COM steps if running on Windows (ignored on Linux)", value=False)
+
+if st.button("🚀 Run Processing"):
+    with st.spinner("Processing — this may take a little while..."):
         try:
-            # override file paths dynamically
-            Islam_Slides_Task.main._globals_['excel_path'] = excel_path
-            Islam_Slides_Task.main._globals_['pptx_file'] = pptx_path
+            # Inject the uploaded paths into the Islam_Slides_Task module globals if those global names are used.
+            # Many scripts define global variables like 'excel_path' and 'pptx_file' — override them if present.
+            Islam_Slides_Task._dict_['excel_path'] = excel_path
+            Islam_Slides_Task._dict_['pptx_file'] = pptx_path
 
-            with st.spinner("Processing and updating PowerPoint..."):
+            # Ensure we reflect any change to USE_WIN32 preference (only meaningful on Windows)
+            if 'USE_WIN32' in Islam_Slides_Task._dict_:
+                Islam_Slides_Task._dict['USE_WIN32'] = use_win32_if_available and Islam_Slides_Task.dict_.get('USE_WIN32', False)
+
+            # If your script exposes a callable main() run it; otherwise attempt to import/execute.
+            if hasattr(Islam_Slides_Task, 'main'):
                 Islam_Slides_Task.main()
+            else:
+                # fallback: try to run top-level function name or raise
+                raise RuntimeError("Islam_Slides_Task.py does not expose a main() function.")
 
+            st.success("🎉 PowerPoint updated successfully!")
+
+            # Offer the user the updated pptx to download
             with open(pptx_path, "rb") as f:
-                st.success("🎉 PowerPoint updated successfully!")
-                st.download_button(
-                    "⬇️ Download Updated PowerPoint",
-                    f,
-                    file_name="Updated_Report.pptx"
-                )
+                st.download_button("⬇️ Download Updated PowerPoint", f, file_name="Updated_Report.pptx")
         except Exception as e:
-            st.error(f"❌ Error: {e}")
-else:
-    st.info("Please upload both files to continue.")
+            st.error(f"❌ Processing failed: {e}")
+            st.exception(e)
