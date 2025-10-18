@@ -3,7 +3,7 @@ import streamlit as st
 import tempfile
 import os
 import importlib
-import Islam_Slides_Task  # your full script file in repo root
+import Main_Code_Task  # your full script file in repo root
 
 st.set_page_config(page_title="Network KPI PowerPoint Updater", page_icon="📊", layout="centered")
 st.title("📊 Network KPI PowerPoint Updater")
@@ -42,9 +42,7 @@ if st.button("🚀 Run Processing"):
             Islam_Slides_Task._dict_['excel_path'] = excel_path
             Islam_Slides_Task._dict_['pptx_file'] = pptx_path
 
-            # Ensure we reflect any change to USE_WIN32 preference (only meaningful on Windows)
-            if 'USE_WIN32' in Islam_Slides_Task._dict_:
-                Islam_Slides_Task._dict['USE_WIN32'] = use_win32_if_available and Islam_Slides_Task.dict_.get('USE_WIN32', False)
+)
 
             # If your script exposes a callable main() run it; otherwise attempt to import/execute.
             if hasattr(Islam_Slides_Task, 'main'):
@@ -61,3 +59,4 @@ if st.button("🚀 Run Processing"):
         except Exception as e:
             st.error(f"❌ Processing failed: {e}")
             st.exception(e)
+
