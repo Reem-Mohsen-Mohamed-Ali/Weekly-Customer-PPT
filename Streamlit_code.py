@@ -27,7 +27,7 @@ def add_bg_from_local(image_file):
     )
 
 # Example: use your own image path here
-add_bg_from_local("Cityscape__Logo_16x9.jpg")  # <-- put your image file in the same folder as app.py
+add_bg_from_local("GettyImages-1648872271.jpg")  # <-- put your image file in the same folder as app.py
 
 # ---- App Title ----
 st.title("📊 UE & SI Customer KPIs Weekly Slides")
@@ -77,4 +77,5 @@ if st.button("🚀 Run Processing"):
         except Exception as e:
             st.error(f"❌ Processing failed: {e}")
             st.exception(e)
+
 
