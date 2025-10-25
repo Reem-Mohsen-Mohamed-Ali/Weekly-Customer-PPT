@@ -30,21 +30,14 @@ def add_bg_from_local(image_file):
             background-repeat: no-repeat;
             background-position: center;
             background-attachment: fixed;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
         }}
 
-        /* --- Glass Effect Box --- */
-        .report-box {{
-            background: rgba(255, 255, 255, 0.85);
-            padding: 2.5rem 3rem;
-            border-radius: 25px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            max-width: 850px;
-            width: 100%;
+        /* --- Center All Content --- */
+        .main {{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             text-align: center;
         }}
 
@@ -52,16 +45,17 @@ def add_bg_from_local(image_file):
         h1 {{
             text-align: center;
             font-weight: 900;
-            color: #002b5c;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            color: #ffffff;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
             margin-bottom: 0.5rem;
         }}
 
         /* --- Subtitle --- */
         .subtitle {{
             text-align: center;
-            font-size: 1.1rem;
-            color: #003366;
+            font-size: 1.2rem;
+            color: #e6e6e6;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
             margin-bottom: 2rem;
         }}
 
@@ -69,46 +63,56 @@ def add_bg_from_local(image_file):
         div.row-widget.stRadio > div {{
             justify-content: center;
             display: flex;
+            gap: 1.5rem;
         }}
-
         label[data-testid="stMarkdownContainer"] p {{
             text-align: center !important;
         }}
 
-        /* --- Button Styling --- */
+        /* --- Buttons --- */
         div.stButton > button:first-child {{
-            background-color: #0073e6;
+            background-color: #005bb5;
             color: white;
             font-size: 18px;
             border-radius: 12px;
             height: 3rem;
             width: 80%;
-            margin: 1rem auto;
+            margin-top: 1.5rem;
             border: none;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             transition: all 0.3s ease;
-            display: block;
         }}
         div.stButton > button:first-child:hover {{
-            background-color: #005bb5;
+            background-color: #0073e6;
             transform: scale(1.03);
         }}
 
-        /* --- Upload Elements --- */
+        /* --- Upload Areas --- */
         section[data-testid="stFileUploader"] {{
             text-align: center;
         }}
+
+        /* --- Info Text --- */
+        .upload-info {{
+            color: #fff;
+            font-weight: bold;
+            font-size: 1.1rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.9);
+            background: rgba(0, 0, 0, 0.35);
+            padding: 0.7rem 1rem;
+            border-radius: 8px;
+            display: inline-block;
+        }}
+
         </style>
         """,
         unsafe_allow_html=True
     )
 
-# Add your background
+# ---- Add the Background ----
 add_bg_from_local("Containers_Angled_Amplifier_16x9.jpg")
 
-# ---- Main App Box ----
-st.markdown('<div class="report-box">', unsafe_allow_html=True)
-
+# ---- App Header ----
 st.title("📊 Network KPI Weekly Slides Generator")
 st.markdown(
     '<p class="subtitle">Select your report type (<b>UE & SI</b> or <b>DE</b>), upload the required Excel and PowerPoint files,<br>then click <b>Run Processing</b> to automatically update your PowerPoint report.</p>',
@@ -128,7 +132,7 @@ if report_type == "UE & SI":
     ppt_file = st.file_uploader("📊 Upload PowerPoint file (.pptx)", type=["pptx"])
 
     if not (excel_file and ppt_file):
-        st.info("Please upload both an Excel file and a PowerPoint file to continue.")
+        st.markdown('<p class="upload-info">⚠️ Please upload both an Excel file and a PowerPoint file to continue.</p>', unsafe_allow_html=True)
     else:
         temp_dir = tempfile.mkdtemp()
         excel_path = os.path.join(temp_dir, excel_file.name)
@@ -163,35 +167,10 @@ else:
     ppt_file = st.file_uploader("📊 Upload PowerPoint file (.pptx)", type=["pptx"])
 
     if not (excel_file_2G_3G_4G and excel_file_5G and ppt_file):
-        st.info("Please upload both Excel files (2G/3G/4G and 5G) and the PowerPoint file.")
+        st.markdown(
+            '<p class="upload-info">⚠️ Please upload both Excel files (2G/3G/4G and 5G) and the PowerPoint file.</p>',
+            unsafe_allow_html=True,
+        )
     else:
         temp_dir = tempfile.mkdtemp()
-        excel_path_2G_3G_4G = os.path.join(temp_dir, excel_file_2G_3G_4G.name)
-        excel_path_5G = os.path.join(temp_dir, excel_file_5G.name)
-        pptx_path = os.path.join(temp_dir, ppt_file.name)
-
-        for file_obj, path in [
-            (excel_file_2G_3G_4G, excel_path_2G_3G_4G),
-            (excel_file_5G, excel_path_5G),
-            (ppt_file, pptx_path),
-        ]:
-            with open(path, "wb") as f:
-                f.write(file_obj.read())
-
-        if st.button("🚀 Run Processing"):
-            with st.spinner("Processing DE Report — please wait..."):
-                try:
-                    if hasattr(Delta_code_5G, 'main_with_paths_DE'):
-                        Delta_code_5G.main_with_paths_DE(excel_path_2G_3G_4G, excel_path_5G, pptx_path)
-                    else:
-                        Delta_code_5G.main_with_paths(excel_path_2G_3G_4G, pptx_path)
-                    if hasattr(Delta_code_5G, 'main'):
-                        Delta_code_5G.main()
-                    st.success("🎉 DE PowerPoint updated successfully!")
-                    with open(pptx_path, "rb") as f:
-                        st.download_button("⬇️ Download Updated PowerPoint", f, file_name="Updated_DE_Report.pptx")
-                except Exception as e:
-                    st.error(f"❌ Processing failed: {e}")
-                    st.exception(e)
-
-st.markdown('</div>', unsafe_allow_html=True)
+        excel_path_2G_3G_4G = os.path.join(te
