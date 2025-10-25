@@ -63,7 +63,9 @@ def add_bg_from_local(image_file):
         div.stRadio > div {{
             display: flex !important;
             justify-content: center !important;
-            gap: 2rem;
+            align-items: center !important;
+            width: 100% !important;
+            gap: 1.5rem;
         }}
         label[data-testid="stMarkdownContainer"] p {{
             text-align: center !important;
@@ -200,6 +202,7 @@ else:
                 except Exception as e:
                     st.error(f"❌ Processing failed: {e}")
                     st.exception(e)
+
 
 
 
