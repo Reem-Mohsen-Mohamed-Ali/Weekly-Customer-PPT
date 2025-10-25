@@ -173,4 +173,30 @@ else:
         )
     else:
         temp_dir = tempfile.mkdtemp()
-        excel_path_2G_3G_4G = os.path.join(te
+        excel_path_2G_3G_4G = os.path.join(temp_dir, excel_file_2G_3G_4G.name)
+        excel_path_5G = os.path.join(temp_dir, excel_file_5G.name)
+        pptx_path = os.path.join(temp_dir, ppt_file.name)
+
+        for file_obj, path in [
+            (excel_file_2G_3G_4G, excel_path_2G_3G_4G),
+            (excel_file_5G, excel_path_5G),
+            (ppt_file, pptx_path),
+        ]:
+            with open(path, "wb") as f:
+                f.write(file_obj.read())
+
+        if st.button("🚀 Run Processing"):
+            with st.spinner("Processing DE Report — please wait..."):
+                try:
+                    if hasattr(Delta_code_5G, 'main_with_paths_DE'):
+                        Delta_code_5G.main_with_paths_DE(excel_path_2G_3G_4G, excel_path_5G, pptx_path)
+                    else:
+                        Delta_code_5G.main_with_paths(excel_path_2G_3G_4G, pptx_path)
+                    if hasattr(Delta_code_5G, 'main'):
+                        Delta_code_5G.main()
+                    st.success("🎉 DE PowerPoint updated successfully!")
+                    with open(pptx_path, "rb") as f:
+                        st.download_button("⬇️ Download Updated PowerPoint", f, file_name="Updated_DE_Report.pptx")
+                except Exception as e:
+                    st.error(f"❌ Processing failed: {e}")
+                    st.exception(e)
