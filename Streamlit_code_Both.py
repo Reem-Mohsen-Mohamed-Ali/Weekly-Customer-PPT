@@ -54,7 +54,7 @@ def add_bg_from_local(image_file):
         .subtitle {{
             text-align: center;
             font-size: 1.2rem;
-            color: white;
+            color: black;
             margin-bottom: 1rem;
         }}
 
@@ -134,7 +134,23 @@ report_type = st.radio(
     label_visibility="collapsed"
 )
 st.markdown('</div>', unsafe_allow_html=True)
+# Apply custom CSS to increase file uploader font size
+st.markdown(
+    """
+    <style>
+    /* Target file uploader labels */
+    div[data-testid="stFileUploader"] > label {
+        font-size: 20px;  /* adjust font size here */
+        font-weight: bold; /* optional */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
+# File uploaders
+excel_file = st.file_uploader("📈 Upload Excel file (.xlsx)", type=["xlsx"])
+ppt_file = st.file_uploader("📊 Upload PowerPoint file (.pptx)", type=["pptx"])
 # ============================================================
 # ---- UE & SI SECTION ----
 # ============================================================
@@ -213,6 +229,7 @@ else:
                 except Exception as e:
                     st.error(f"❌ Processing failed: {e}")
                     st.exception(e)
+
 
 
 
