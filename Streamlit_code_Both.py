@@ -117,8 +117,13 @@ def add_bg_from_local(image_file):
 # ---- Add the Background ----
 add_bg_from_local("Snap6.png")
 
-# ---- App Header ----
-st.title("📊 Network KPI Weekly Slides Generator")
+# ---- App Header (White Title) ----
+st.markdown(
+    '<h1 style="color:white; text-align:center; font-weight:900; text-shadow:1px 1px 3px rgba(0,0,0,0.6);">📊 Network KPI Weekly Slides Generator</h1>',
+    unsafe_allow_html=True
+)
+
+# ---- Subtitle ----
 st.markdown(
     '<p class="subtitle">Select your report type (<b>UE & SI</b> or <b>DE</b>), upload the required Excel and PowerPoint files,<br>then click <b>Run Processing</b> to automatically update your PowerPoint report.</p>',
     unsafe_allow_html=True
@@ -141,8 +146,8 @@ st.markdown('</div>', unsafe_allow_html=True)
 if report_type == "UE & SI":
     st.header("📁 UE & SI Input Files")
 
-    excel_file = st.file_uploader("Upload Excel file (.xlsx) - UE & SI", type=["xlsx"])
-    ppt_file = st.file_uploader("Upload PowerPoint file (.pptx) - UE & SI", type=["pptx"])
+    excel_file = st.file_uploader("📈 Upload Excel file (.xlsx)", type=["xlsx"])
+    ppt_file = st.file_uploader("📊 Upload PowerPoint file (.pptx)", type=["pptx"])
 
     if not (excel_file and ppt_file):
         st.markdown('<p class="upload-info">⚠️ Please upload both an Excel file and a PowerPoint file to continue.</p>', unsafe_allow_html=True)
@@ -175,9 +180,9 @@ if report_type == "UE & SI":
 else:
     st.header("📁 DE Input Files")
 
-    excel_file_2G_3G_4G = st.file_uploader("Upload 2G / 3G / 4G Excel file (.xlsx) - DE", type=["xlsx"])
-    excel_file_5G = st.file_uploader("Upload 5G Excel file (.xlsx) - DE", type=["xlsx"])
-    ppt_file = st.file_uploader("Upload PowerPoint file (.pptx) - DE", type=["pptx"])
+    excel_file_2G_3G_4G = st.file_uploader("📶 Upload 2G / 3G / 4G Excel file (.xlsx)", type=["xlsx"])
+    excel_file_5G = st.file_uploader("📡 Upload 5G Excel file (.xlsx)", type=["xlsx"])
+    ppt_file = st.file_uploader("📊 Upload PowerPoint file (.pptx)", type=["pptx"])
 
     if not (excel_file_2G_3G_4G and excel_file_5G and ppt_file):
         st.markdown(
