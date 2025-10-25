@@ -8,124 +8,128 @@ Created on Sun Oct 26 00:44:04 2025
 import streamlit as st
 import tempfile
 import os
-import base64
 import Main_Code_Task
-import Delta_code_5G
+import Delta_code_5G  # your backend Python file
 
-# ============================================================
-# ---- PAGE CONFIG ----
-# ============================================================
-st.set_page_config(
-    page_title="Network KPI PowerPoint Updater",
-    page_icon="📊",
-    layout="centered"
-)
+# ---- Page Config ----
+st.set_page_config(page_title="Network KPI PowerPoint Updater", page_icon="📊", layout="centered")
 
-# ============================================================
-# ---- ANIMATED BACKGROUND ----
-# ============================================================
-def add_animated_bg(image_file):
+# ---- Background Image ----
+def add_bg_from_local(image_file):
+    import base64
     with open(image_file, "rb") as f:
         base64_image = base64.b64encode(f.read()).decode()
+
     st.markdown(
         f"""
         <style>
+        /* --- Fullscreen Background --- */
         .stApp {{
             background-image: url("data:image/png;base64,{base64_image}");
             background-size: cover;
+            background-repeat: no-repeat;
             background-position: center;
             background-attachment: fixed;
-            animation: moveBg 40s ease-in-out infinite alternate;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }}
 
-        @keyframes moveBg {{
-            0% {{ background-position: center top; }}
-            100% {{ background-position: center bottom; }}
+        /* --- Glass Effect Box --- */
+        .report-box {{
+            background: rgba(255, 255, 255, 0.85);
+            padding: 2.5rem 3rem;
+            border-radius: 25px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            max-width: 850px;
+            width: 100%;
+            text-align: center;
         }}
 
-        /* Title styling */
+        /* --- Title --- */
         h1 {{
-            color: #0f172a;
-            text-shadow: 2px 2px 8px rgba(255,255,255,0.9);
+            text-align: center;
+            font-weight: 900;
+            color: #002b5c;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            margin-bottom: 0.5rem;
         }}
 
-        /* Section headers */
-        .stHeader, h2, h3 {{
-            color: #1e3a8a !important;
-            font-weight: 800 !important;
-            text-shadow: 1px 1px 3px rgba(255,255,255,0.7);
+        /* --- Subtitle --- */
+        .subtitle {{
+            text-align: center;
+            font-size: 1.1rem;
+            color: #003366;
+            margin-bottom: 2rem;
         }}
 
-        /* Card style */
-        .stCard {{
-            background-color: rgba(255,255,255,0.85);
-            border-radius: 16px;
-            padding: 1.5rem;
-            box-shadow: 0 6px 25px rgba(0,0,0,0.2);
+        /* --- Radio Buttons --- */
+        div.row-widget.stRadio > div {{
+            justify-content: center;
+            display: flex;
         }}
 
-        /* Buttons */
-        .stButton>button {{
-            background: linear-gradient(90deg, #2563eb, #60a5fa);
-            color: white !important;
+        label[data-testid="stMarkdownContainer"] p {{
+            text-align: center !important;
+        }}
+
+        /* --- Button Styling --- */
+        div.stButton > button:first-child {{
+            background-color: #0073e6;
+            color: white;
+            font-size: 18px;
+            border-radius: 12px;
+            height: 3rem;
+            width: 80%;
+            margin: 1rem auto;
             border: none;
-            border-radius: 10px;
-            padding: 0.6rem 1.2rem;
-            font-weight: 600;
-            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            display: block;
         }}
-        .stButton>button:hover {{
-            background: linear-gradient(90deg, #1d4ed8, #3b82f6);
-            transform: scale(1.05);
+        div.stButton > button:first-child:hover {{
+            background-color: #005bb5;
+            transform: scale(1.03);
         }}
 
-        /* Radio buttons */
-        .stRadio label {{
-            color: #0f172a !important;
-            font-weight: 600;
+        /* --- Upload Elements --- */
+        section[data-testid="stFileUploader"] {{
+            text-align: center;
         }}
         </style>
         """,
         unsafe_allow_html=True
     )
 
-# Apply the moving wallpaper
-add_animated_bg("Containers_Angled_Amplifier_16x9.jpg")
+# Add your background
+add_bg_from_local("Containers_Angled_Amplifier_16x9.jpg")
 
-# ============================================================
-# ---- HEADER ----
-# ============================================================
+# ---- Main App Box ----
+st.markdown('<div class="report-box">', unsafe_allow_html=True)
+
 st.title("📊 Network KPI Weekly Slides Generator")
-st.markdown("""
-<div style='font-size:1.1rem; font-weight:500; color:#0f172a; background-color: rgba(255,255,255,0.7); 
-padding:10px; border-radius:8px;'>
-Select your report type (<b>UE & SI</b> or <b>DE</b>), upload the required Excel and PowerPoint files,  
-and click <b>Run Processing</b> to automatically update your PowerPoint report.
-</div>
-""", unsafe_allow_html=True)
+st.markdown(
+    '<p class="subtitle">Select your report type (<b>UE & SI</b> or <b>DE</b>), upload the required Excel and PowerPoint files,<br>then click <b>Run Processing</b> to automatically update your PowerPoint report.</p>',
+    unsafe_allow_html=True
+)
 
-# ============================================================
-# ---- REPORT TYPE ----
-# ============================================================
+# ---- Report Type Selection ----
 report_type = st.radio("Select Report Type:", ["UE & SI", "DE"], horizontal=True)
 
 # ============================================================
 # ---- UE & SI SECTION ----
 # ============================================================
 if report_type == "UE & SI":
-    st.markdown("<h2>📁 UE & SI Input Files</h2>", unsafe_allow_html=True)
+    st.header("📁 UE & SI Input Files")
 
-    with st.container():
-        st.markdown("<div class='stCard'>", unsafe_allow_html=True)
+    excel_file = st.file_uploader("📈 Upload Excel file (.xlsx)", type=["xlsx"])
+    ppt_file = st.file_uploader("📊 Upload PowerPoint file (.pptx)", type=["pptx"])
 
-        excel_file = st.file_uploader("📈 Upload Excel file (.xlsx)", type=["xlsx"])
-        ppt_file = st.file_uploader("📊 Upload PowerPoint file (.pptx)", type=["pptx"])
-
-        if not (excel_file and ppt_file):
-            st.info("Please upload both an Excel file and a PowerPoint file to continue.")
-            st.stop()
-
-        # ---- Save to temp ----
+    if not (excel_file and ppt_file):
+        st.info("Please upload both an Excel file and a PowerPoint file to continue.")
+    else:
         temp_dir = tempfile.mkdtemp()
         excel_path = os.path.join(temp_dir, excel_file.name)
         pptx_path = os.path.join(temp_dir, ppt_file.name)
@@ -134,8 +138,6 @@ if report_type == "UE & SI":
             f.write(excel_file.read())
         with open(pptx_path, "wb") as f:
             f.write(ppt_file.read())
-
-        st.success("✅ Files uploaded and saved temporarily.")
 
         if st.button("🚀 Run Processing"):
             with st.spinner("Processing UE & SI Report — please wait..."):
@@ -149,30 +151,20 @@ if report_type == "UE & SI":
                 except Exception as e:
                     st.error(f"❌ Processing failed: {e}")
                     st.exception(e)
-        st.markdown("</div>", unsafe_allow_html=True)
 
 # ============================================================
 # ---- DE SECTION ----
 # ============================================================
 else:
-    st.markdown("<h2>📁 DE Input Files</h2>", unsafe_allow_html=True)
+    st.header("📁 DE Input Files")
 
-    with st.container():
-        st.markdown("<div class='stCard'>", unsafe_allow_html=True)
+    excel_file_2G_3G_4G = st.file_uploader("📶 Upload 2G / 3G / 4G Excel file (.xlsx)", type=["xlsx"])
+    excel_file_5G = st.file_uploader("📡 Upload 5G Excel file (.xlsx)", type=["xlsx"])
+    ppt_file = st.file_uploader("📊 Upload PowerPoint file (.pptx)", type=["pptx"])
 
-        col1, col2 = st.columns(2)
-        with col1:
-            excel_file_2G_3G_4G = st.file_uploader("📶 Upload 2G / 3G / 4G Excel file (.xlsx)", type=["xlsx"])
-        with col2:
-            excel_file_5G = st.file_uploader("📡 Upload 5G Excel file (.xlsx)", type=["xlsx"])
-
-        ppt_file = st.file_uploader("📊 Upload PowerPoint file (.pptx)", type=["pptx"])
-
-        if not (excel_file_2G_3G_4G and excel_file_5G and ppt_file):
-            st.info("Please upload both Excel files (2G/3G/4G and 5G) and the PowerPoint file.")
-            st.stop()
-
-        # ---- Save to temp ----
+    if not (excel_file_2G_3G_4G and excel_file_5G and ppt_file):
+        st.info("Please upload both Excel files (2G/3G/4G and 5G) and the PowerPoint file.")
+    else:
         temp_dir = tempfile.mkdtemp()
         excel_path_2G_3G_4G = os.path.join(temp_dir, excel_file_2G_3G_4G.name)
         excel_path_5G = os.path.join(temp_dir, excel_file_5G.name)
@@ -186,29 +178,20 @@ else:
             with open(path, "wb") as f:
                 f.write(file_obj.read())
 
-        st.success("✅ All DE files uploaded and saved temporarily.")
-
         if st.button("🚀 Run Processing"):
             with st.spinner("Processing DE Report — please wait..."):
                 try:
                     if hasattr(Delta_code_5G, 'main_with_paths_DE'):
-                        Delta_code_5G.main_with_paths_DE(
-                            excel_path_2G_3G_4G,
-                            excel_path_5G,
-                            pptx_path
-                        )
+                        Delta_code_5G.main_with_paths_DE(excel_path_2G_3G_4G, excel_path_5G, pptx_path)
                     else:
                         Delta_code_5G.main_with_paths(excel_path_2G_3G_4G, pptx_path)
-
                     if hasattr(Delta_code_5G, 'main'):
                         Delta_code_5G.main()
-
                     st.success("🎉 DE PowerPoint updated successfully!")
                     with open(pptx_path, "rb") as f:
                         st.download_button("⬇️ Download Updated PowerPoint", f, file_name="Updated_DE_Report.pptx")
-
                 except Exception as e:
                     st.error(f"❌ Processing failed: {e}")
                     st.exception(e)
 
-        st.markdown("</div>", unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
