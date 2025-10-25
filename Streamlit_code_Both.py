@@ -46,7 +46,6 @@ def add_bg_from_local(image_file):
             text-align: center;
             font-weight: 900;
             color: #ffffff;
-        
             margin-bottom: 0.5rem;
         }}
 
@@ -55,20 +54,14 @@ def add_bg_from_local(image_file):
             text-align: center;
             font-size: 1.2rem;
             color: #000000;
-        
             margin-bottom: 2rem;
         }}
 
-        /* --- Radio Buttons --- */
+        /* --- Radio Buttons Container --- */
         div.stRadio > div {{
             display: flex !important;
             justify-content: center !important;
-            align-items: center !important;
-            width: 100% !important;
-            gap: 1.5rem;
-        }}
-        label[data-testid="stMarkdownContainer"] p {{
-            text-align: center !important;
+            gap: 2rem;
         }}
 
         /* --- Buttons --- */
@@ -105,7 +98,6 @@ def add_bg_from_local(image_file):
             border-radius: 8px;
             display: inline-block;
         }}
-
         </style>
         """,
         unsafe_allow_html=True
@@ -121,8 +113,14 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# ---- Report Type Selection ----
-report_type = st.radio("Select Report Type:", ["UE & SI", "DE"], horizontal=True)
+# ---- Centered Radio Button as Subtitle ----
+st.markdown('<p class="subtitle">Select Report Type:</p>', unsafe_allow_html=True)
+report_type = st.radio(
+    "",
+    ["UE & SI", "DE"],
+    horizontal=True,
+    label_visibility="collapsed"  # hide default label
+)
 
 # ============================================================
 # ---- UE & SI SECTION ----
@@ -202,8 +200,3 @@ else:
                 except Exception as e:
                     st.error(f"❌ Processing failed: {e}")
                     st.exception(e)
-
-
-
-
-
