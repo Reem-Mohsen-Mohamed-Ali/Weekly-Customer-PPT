@@ -46,7 +46,7 @@ def add_bg_from_local(image_file):
             text-align: center;
             font-weight: 900;
             color: #ffffff;
-            text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+        
             margin-bottom: 0.5rem;
         }}
 
@@ -55,7 +55,7 @@ def add_bg_from_local(image_file):
             text-align: center;
             font-size: 1.2rem;
             color: #000000;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+        
             margin-bottom: 2rem;
         }}
 
@@ -200,5 +200,6 @@ else:
                 except Exception as e:
                     st.error(f"❌ Processing failed: {e}")
                     st.exception(e)
+
 
 
