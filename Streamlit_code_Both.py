@@ -8,15 +8,15 @@ Created on Sun Oct 26 00:44:04 2025
 import streamlit as st
 import tempfile
 import os
+import base64
 import Main_Code_Task
-import Delta_code_5G  # your backend Python file
+import Delta_code_5G  # your backend Python file(s)
 
 # ---- Page Config ----
 st.set_page_config(page_title="Network KPI PowerPoint Updater", page_icon="📊", layout="centered")
 
-# ---- Background Image ----
+# ---- Background Image Loader ----
 def add_bg_from_local(image_file):
-    import base64
     with open(image_file, "rb") as f:
         base64_image = base64.b64encode(f.read()).decode()
 
@@ -32,99 +32,123 @@ def add_bg_from_local(image_file):
             background-attachment: fixed;
         }}
 
-        /* --- Center All Content --- */
+        /* --- Center Content Container --- */
         .main {{
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
+            padding-top: 1.5rem;
         }}
 
         /* --- Title --- */
-        h1 {{
-            text-align: center;
+        .title {{
+            font-size: 2.6rem;
             font-weight: 900;
-            color: #ffffff;
-            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+            text-align: center;
+            margin-bottom: 0.4rem;
         }}
 
         /* --- Subtitle --- */
         .subtitle {{
+            font-size: 1.05rem;
+            color: #111;
             text-align: center;
-            font-size: 1.2rem;
-            color: #000000;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
         }}
 
-        /* --- Buttons --- */
+        /* --- Center Radio Buttons --- */
+        .center-radio {{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2.2rem;
+            margin-top: 0.3rem;
+            margin-bottom: 1.4rem;
+        }}
+
+        /* --- Radio button label style (improve visibility) --- */
+        label[data-baseweb="radio"] > div {{
+            font-size: 1.05rem !important;
+            font-weight: 600 !important;
+            color: #000 !important;
+        }}
+
+        /* --- Styled Run Button --- */
         div.stButton > button:first-child {{
             background-color: #005bb5;
             color: white;
-            font-size: 18px;
-            border-radius: 12px;
-            height: 3rem;
-            width: 80%;
-            margin-top: 1.5rem;
+            font-size: 16px;
+            border-radius: 10px;
+            padding: 0.55rem 1.2rem;
             border: none;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            transition: all 0.3s ease;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            transition: all 0.18s ease;
         }}
         div.stButton > button:first-child:hover {{
+            transform: translateY(-2px);
             background-color: #0073e6;
-            transform: scale(1.03);
         }}
 
-        /* --- Upload Areas --- */
+        /* --- Upload area align center --- */
         section[data-testid="stFileUploader"] {{
             text-align: center;
         }}
 
-        /* --- Info Text --- */
+        /* --- Info text --- */
         .upload-info {{
             color: #fff;
             font-weight: bold;
-            font-size: 1.1rem;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.9);
+            font-size: 1.02rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
             background: rgba(0, 0, 0, 0.35);
-            padding: 0.7rem 1rem;
+            padding: 0.6rem 0.9rem;
             border-radius: 8px;
             display: inline-block;
         }}
         </style>
         """,
-        unsafe_allow_html=True
+        unsafe_allow_html=True,
     )
 
-# ---- Add the Background ----
-add_bg_from_local("Containers_Angled_Amplifier_16x9.jpg")
+# ---- Add the Background (file must be present in same folder) ----
+# change filename if your image has another name
+bg_image_filename = "Containers_Angled_Amplifier_16x9.jpg"
+if os.path.exists(bg_image_filename):
+    add_bg_from_local(bg_image_filename)
+else:
+    # fallback: if image missing, add only minimal CSS
+    st.markdown(
+        """
+        <style>
+        .main { text-align:center; padding-top:1.5rem; }
+        .title{ font-size:2.2rem; font-weight:800; }
+        .subtitle{ font-size:1rem; color:#111; }
+        .center-radio{ display:flex; justify-content:center; gap:2rem; margin:0.6rem 0 1.2rem; }
+        label[data-baseweb="radio"] > div { font-weight:600; }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
 
 # ---- App Header ----
-st.title("📊 Network KPI Weekly Slides Generator")
+st.markdown('<div class="title">📊 Network KPI Weekly Slides Generator</div>', unsafe_allow_html=True)
 st.markdown(
-    '<p class="subtitle">Select your report type (<b>UE & SI</b> or <b>DE</b>), upload the required Excel and PowerPoint files,<br>then click <b>Run Processing</b> to automatically update your PowerPoint report.</p>',
-    unsafe_allow_html=True
+    '<div class="subtitle">Select your report type (<b>UE & SI</b> or <b>DE</b>), upload the required Excel and PowerPoint files,<br>then click <b>Run Processing</b> to automatically update your PowerPoint report.</div>',
+    unsafe_allow_html=True,
 )
 
-# ---- Centered Select Report Type Block ----
-st.markdown(
-    """
-    <div style="text-align:center; margin-bottom: 1rem;">
-        <p class="subtitle">Select Report Type:</p>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+# ---- Centered Select Report Type Block (pixel-perfect centering) ----
+st.markdown('<p class="subtitle">Select Report Type:</p>', unsafe_allow_html=True)
 
-# ---- Center the Radio Buttons Using Columns ----
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    report_type = st.radio(
-        "",
-        ["UE & SI", "DE"],
-        horizontal=True,
-        label_visibility="collapsed"
-    )
+# wrap radio in a center container using our CSS class
+st.markdown('<div class="center-radio">', unsafe_allow_html=True)
+report_type = st.radio(
+    "", ["UE & SI", "DE"], horizontal=True, label_visibility="collapsed"
+)
+st.markdown('</div>', unsafe_allow_html=True)
 
 # ============================================================
 # ---- UE & SI SECTION ----
@@ -136,7 +160,10 @@ if report_type == "UE & SI":
     ppt_file = st.file_uploader("📊 Upload PowerPoint file (.pptx)", type=["pptx"])
 
     if not (excel_file and ppt_file):
-        st.markdown('<p class="upload-info">⚠️ Please upload both an Excel file and a PowerPoint file to continue.</p>', unsafe_allow_html=True)
+        st.markdown(
+            '<p class="upload-info">⚠️ Please upload both an Excel file and a PowerPoint file to continue.</p>',
+            unsafe_allow_html=True,
+        )
     else:
         temp_dir = tempfile.mkdtemp()
         excel_path = os.path.join(temp_dir, excel_file.name)
@@ -150,12 +177,19 @@ if report_type == "UE & SI":
         if st.button("🚀 Run Processing"):
             with st.spinner("Processing UE & SI Report — please wait..."):
                 try:
-                    Main_Code_Task.main_with_paths(excel_path, pptx_path)
-                    if hasattr(Main_Code_Task, 'main'):
+                    # prefer main_with_paths if available
+                    if hasattr(Main_Code_Task, "main_with_paths"):
+                        Main_Code_Task.main_with_paths(excel_path, pptx_path)
+                    # fallback to main if present
+                    if hasattr(Main_Code_Task, "main"):
                         Main_Code_Task.main()
                     st.success("🎉 UE & SI PowerPoint updated successfully!")
                     with open(pptx_path, "rb") as f:
-                        st.download_button("⬇️ Download Updated PowerPoint", f, file_name="Updated_UE_SI_Report.pptx")
+                        st.download_button(
+                            "⬇️ Download Updated PowerPoint",
+                            f,
+                            file_name="Updated_UE_SI_Report.pptx",
+                        )
                 except Exception as e:
                     st.error(f"❌ Processing failed: {e}")
                     st.exception(e)
@@ -192,15 +226,30 @@ else:
         if st.button("🚀 Run Processing"):
             with st.spinner("Processing DE Report — please wait..."):
                 try:
-                    if hasattr(Delta_code_5G, 'main_with_paths_DE'):
+                    # prefer main_with_paths_DE if available
+                    if hasattr(Delta_code_5G, "main_with_paths_DE"):
                         Delta_code_5G.main_with_paths_DE(excel_path_2G_3G_4G, excel_path_5G, pptx_path)
-                    else:
+                    elif hasattr(Delta_code_5G, "main_with_paths"):
+                        # some older module versions may expect different args
                         Delta_code_5G.main_with_paths(excel_path_2G_3G_4G, pptx_path)
-                    if hasattr(Delta_code_5G, 'main'):
+                    if hasattr(Delta_code_5G, "main"):
                         Delta_code_5G.main()
                     st.success("🎉 DE PowerPoint updated successfully!")
                     with open(pptx_path, "rb") as f:
-                        st.download_button("⬇️ Download Updated PowerPoint", f, file_name="Updated_DE_Report.pptx")
+                        st.download_button(
+                            "⬇️ Download Updated PowerPoint",
+                            f,
+                            file_name="Updated_DE_Report.pptx",
+                        )
                 except Exception as e:
                     st.error(f"❌ Processing failed: {e}")
                     st.exception(e)
+
+# ---- Footer ----
+st.markdown(
+    """
+    <hr style="margin-top:2.5rem; border:1px solid rgba(0,0,0,0.08)">
+    <p style='text-align:center; color:#444; margin-top:0.6rem;'>Developed by Reem • Streamlit UI</p>
+    """,
+    unsafe_allow_html=True,
+)
