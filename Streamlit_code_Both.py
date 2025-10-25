@@ -60,10 +60,10 @@ def add_bg_from_local(image_file):
         }}
 
         /* --- Radio Buttons --- */
-        div.row-widget.stRadio > div {{
-            justify-content: center;
-            display: flex;
-            gap: 1.5rem;
+        div.stRadio > div {{
+            display: flex !important;
+            justify-content: center !important;
+            gap: 2rem;
         }}
         label[data-testid="stMarkdownContainer"] p {{
             text-align: center !important;
@@ -200,6 +200,7 @@ else:
                 except Exception as e:
                     st.error(f"❌ Processing failed: {e}")
                     st.exception(e)
+
 
 
 
