@@ -54,7 +54,7 @@ def add_bg_from_local(image_file):
         .subtitle {{
             text-align: center;
             font-size: 1.2rem;
-            color: #e6e6e6;
+            color: #ffffff;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
             margin-bottom: 2rem;
         }}
@@ -200,3 +200,4 @@ else:
                 except Exception as e:
                     st.error(f"❌ Processing failed: {e}")
                     st.exception(e)
+
