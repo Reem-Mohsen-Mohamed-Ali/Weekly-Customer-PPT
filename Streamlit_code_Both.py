@@ -54,14 +54,7 @@ def add_bg_from_local(image_file):
             text-align: center;
             font-size: 1.2rem;
             color: #000000;
-            margin-bottom: 2rem;
-        }}
-
-        /* --- Radio Buttons Container --- */
-        div.stRadio > div {{
-            display: flex !important;
-            justify-content: center !important;
-            gap: 2rem;
+            margin-bottom: 1rem;
         }}
 
         /* --- Buttons --- */
@@ -113,14 +106,24 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# ---- Centered Radio Button as Subtitle ----
-st.markdown('<p class="subtitle">Select Report Type:</p>', unsafe_allow_html=True)
+# ---- Centered Select Report Type Block ----
+st.markdown(
+    """
+    <div style="text-align: center; margin-bottom: 1rem;">
+        <p class="subtitle">Select Report Type:</p>
+        <div style="display: inline-block;">
+    """,
+    unsafe_allow_html=True
+)
+
 report_type = st.radio(
     "",
     ["UE & SI", "DE"],
     horizontal=True,
     label_visibility="collapsed"  # hide default label
 )
+
+st.markdown("</div></div>", unsafe_allow_html=True)
 
 # ============================================================
 # ---- UE & SI SECTION ----
