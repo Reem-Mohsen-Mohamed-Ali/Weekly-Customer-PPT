@@ -1,4 +1,4 @@
-# -- coding: utf-8 --
+# -*- coding: utf-8 -*-
 """
 Created on Sun Oct 26 00:44:04 2025
 
@@ -105,9 +105,9 @@ def add_bg_from_local(image_file):
 
         /* --- Radio Text Styling --- */
         label[data-baseweb="radio"] > div {{
-            font-size: 1.05rem !important;
+            font-size: 18px !important;
             font-weight: 600 !important;
-            color: #000 !important;
+            color: white !important;
         }}
         </style>
         """,
@@ -124,8 +124,8 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# ---- Centered Select Report Type ----
-st.markdown('<p class="subtitle">Select Report Type:</p>', unsafe_allow_html=True)
+# ---- Centered Select Report Type (white) ----
+st.markdown('<p style="text-align:center; font-size:20px; font-weight:bold; color:white;">Select Report Type:</p>', unsafe_allow_html=True)
 st.markdown('<div class="center-radio">', unsafe_allow_html=True)
 report_type = st.radio(
     "",
@@ -134,31 +134,19 @@ report_type = st.radio(
     label_visibility="collapsed"
 )
 st.markdown('</div>', unsafe_allow_html=True)
-# Apply custom CSS to increase file uploader font size
-st.markdown(
-    """
-    <style>
-    /* Target file uploader labels */
-    div[data-testid="stFileUploader"] > label {
-        font-size: 20px;  /* adjust font size here */
-        font-weight: bold; /* optional */
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
 
-# File uploaders
-excel_file = st.file_uploader("📈 Upload Excel file (.xlsx)", type=["xlsx"])
-ppt_file = st.file_uploader("📊 Upload PowerPoint file (.pptx)", type=["pptx"])
 # ============================================================
 # ---- UE & SI SECTION ----
 # ============================================================
 if report_type == "UE & SI":
     st.header("📁 UE & SI Input Files")
 
-    excel_file = st.file_uploader("📈 Upload Excel file (.xlsx)", type=["xlsx"])
-    ppt_file = st.file_uploader("📊 Upload PowerPoint file (.pptx)", type=["pptx"])
+    # Larger file uploader labels using Markdown
+    st.markdown("## 📈 Upload Excel file (.xlsx)")
+    excel_file = st.file_uploader("", type=["xlsx"])
+
+    st.markdown("## 📊 Upload PowerPoint file (.pptx)")
+    ppt_file = st.file_uploader("", type=["pptx"])
 
     if not (excel_file and ppt_file):
         st.markdown('<p class="upload-info">⚠️ Please upload both an Excel file and a PowerPoint file to continue.</p>', unsafe_allow_html=True)
@@ -191,9 +179,14 @@ if report_type == "UE & SI":
 else:
     st.header("📁 DE Input Files")
 
-    excel_file_2G_3G_4G = st.file_uploader("📶 Upload 2G / 3G / 4G Excel file (.xlsx)", type=["xlsx"])
-    excel_file_5G = st.file_uploader("📡 Upload 5G Excel file (.xlsx)", type=["xlsx"])
-    ppt_file = st.file_uploader("📊 Upload PowerPoint file (.pptx)", type=["pptx"])
+    st.markdown("## 📶 Upload 2G / 3G / 4G Excel file (.xlsx)")
+    excel_file_2G_3G_4G = st.file_uploader("", type=["xlsx"])
+
+    st.markdown("## 📡 Upload 5G Excel file (.xlsx)")
+    excel_file_5G = st.file_uploader("", type=["xlsx"])
+
+    st.markdown("## 📊 Upload PowerPoint file (.pptx)")
+    ppt_file = st.file_uploader("", type=["pptx"])
 
     if not (excel_file_2G_3G_4G and excel_file_5G and ppt_file):
         st.markdown(
@@ -229,13 +222,3 @@ else:
                 except Exception as e:
                     st.error(f"❌ Processing failed: {e}")
                     st.exception(e)
-
-
-
-
-
-
-
-
-
-
