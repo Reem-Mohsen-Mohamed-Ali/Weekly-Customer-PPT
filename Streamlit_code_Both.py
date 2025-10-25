@@ -115,7 +115,7 @@ def add_bg_from_local(image_file):
     )
 
 # ---- Add the Background ----
-add_bg_from_local("Snap4.png")
+add_bg_from_local("Snap2.png")
 
 # ---- App Header ----
 st.title("📊 Network KPI Weekly Slides Generator")
@@ -213,6 +213,7 @@ else:
                 except Exception as e:
                     st.error(f"❌ Processing failed: {e}")
                     st.exception(e)
+
 
 
 
