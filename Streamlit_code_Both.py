@@ -57,22 +57,6 @@ def add_bg_from_local(image_file):
             margin-bottom: 1rem;
         }}
 
-        /* --- Center Radio Buttons --- */
-        div[role="radiogroup"] {{
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            gap: 2rem !important; /* spacing between buttons */
-            margin-top: 0.5rem;
-            margin-bottom: 1rem;
-        }}
-
-        label[data-baseweb="radio"] > div {{
-            font-size: 1.1rem !important;
-            font-weight: 600 !important;
-            color: #000 !important;
-        }}
-
         /* --- Buttons --- */
         div.stButton > button:first-child {{
             background-color: #005bb5;
@@ -125,22 +109,22 @@ st.markdown(
 # ---- Centered Select Report Type Block ----
 st.markdown(
     """
-    <div style="text-align: center; margin-bottom: 1rem;">
+    <div style="text-align:center; margin-bottom: 1rem;">
         <p class="subtitle">Select Report Type:</p>
-        <div style="display: inline-block;">
+    </div>
     """,
     unsafe_allow_html=True
 )
 
-# ---- Radio Buttons ----
-report_type = st.radio(
-    "",
-    ["UE & SI", "DE"],
-    horizontal=True,
-    label_visibility="collapsed"  # hide default label
-)
-
-st.markdown("</div></div>", unsafe_allow_html=True)
+# ---- Center the Radio Buttons Using Columns ----
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    report_type = st.radio(
+        "",
+        ["UE & SI", "DE"],
+        horizontal=True,
+        label_visibility="collapsed"
+    )
 
 # ============================================================
 # ---- UE & SI SECTION ----
