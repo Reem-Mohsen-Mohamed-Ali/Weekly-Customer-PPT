@@ -15,11 +15,6 @@ import pandas as pd
 from pptx import Presentation
 from pptx.chart.data import CategoryChartData
 from datetime import datetime, timedelta
-import win32com.client
-import os
-
-import shutil
-from openpyxl import load_workbook
 
 
 # Function to extract data from a chart
@@ -1394,4 +1389,5 @@ def main():
 if __name__ == "__main__":
     main()    
 ######################### Port Saaed###########################################
+
 ###############################################################################
