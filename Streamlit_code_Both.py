@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -- coding: utf-8 --
 """
 Created on Sun Oct 26 00:44:04 2025
 
@@ -55,6 +55,22 @@ def add_bg_from_local(image_file):
             font-size: 1.2rem;
             color: #000000;
             margin-bottom: 1rem;
+        }}
+
+        /* --- Center Radio Buttons --- */
+        div[role="radiogroup"] {{
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            gap: 2rem !important; /* spacing between buttons */
+            margin-top: 0.5rem;
+            margin-bottom: 1rem;
+        }}
+
+        label[data-baseweb="radio"] > div {{
+            font-size: 1.1rem !important;
+            font-weight: 600 !important;
+            color: #000 !important;
         }}
 
         /* --- Buttons --- */
@@ -116,6 +132,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# ---- Radio Buttons ----
 report_type = st.radio(
     "",
     ["UE & SI", "DE"],
