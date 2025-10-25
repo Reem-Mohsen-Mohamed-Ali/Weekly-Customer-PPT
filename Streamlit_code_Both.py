@@ -8,7 +8,8 @@ Created on Sun Oct 26 00:44:04 2025
 import streamlit as st
 import tempfile
 import os
-import Main_Code_Task  # your backend Python file
+import Main_Code_Task
+import Delta_code_5G # your backend Python file
 
 # ---- Page Config ----
 st.set_page_config(page_title="Network KPI PowerPoint Updater", page_icon="📊", layout="centered")
@@ -121,18 +122,18 @@ else:
         with st.spinner("Processing DE Report — please wait..."):
             try:
                 # Expecting a DE-specific function in backend
-                if hasattr(Main_Code_Task, 'main_with_paths_DE'):
-                    Main_Code_Task.main_with_paths_DE(
+                if hasattr(Delta_code_5G, 'main_with_paths_DE'):
+                    Delta_code_5G.main_with_paths_DE(
                         excel_path_2G_3G_4G,
                         excel_path_5G,
                         pptx_path
                     )
                 else:
                     # fallback if not separate
-                    Main_Code_Task.main_with_paths(excel_path_2G_3G_4G, pptx_path)
+                    Delta_code_5G.main_with_paths(excel_path_2G_3G_4G, pptx_path)
 
-                if hasattr(Main_Code_Task, 'main'):
-                    Main_Code_Task.main()
+                if hasattr(Delta_code_5G, 'main'):
+                    Delta_code_5G.main()
 
                 st.success("🎉 DE PowerPoint updated successfully!")
                 with open(pptx_path, "rb") as f:
@@ -140,4 +141,5 @@ else:
 
             except Exception as e:
                 st.error(f"❌ Processing failed: {e}")
+
                 st.exception(e)
